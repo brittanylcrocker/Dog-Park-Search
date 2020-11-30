@@ -1,72 +1,109 @@
-import React, {useState} from 'react'
-import { GoogleMap, LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
-import { withScriptjs } from "react-google-maps";
+import React, { Component } from 'react';
+import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
+export class MapContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // for google map places autocomplete
+      address: '',
 
-const containerStyle = {
-  width: '700px',
-  height: '400px'
-};
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
 
-const center = {
-  lat: -3.745,
-  lng: -38.523
-};
+      mapCenter: {
+        lat: 49.2827291,
+        lng: -123.1207375
+      }
+    };
+  }
 
-const libraries = ["places"];
+  handleChange = address => {
+    this.setState({ address });
+  };
 
-function handlePlacesChanged(e) {
-  console.log(e)
+  handleSelect = address => {
+    this.setState({ address });
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng);
+
+        // update center state
+        this.setState({ mapCenter: latLng });
+      })
+      .catch(error => console.error('Error', error));
+  };
+
+  render() {
+    return (
+      <div id='googleMaps'>
+        <PlacesAutocomplete
+          value={this.state.address}
+          onChange={this.handleChange}
+          onSelect={this.handleSelect}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: 'Search Places ...',
+                  className: 'location-search-input',
+                })}
+              />
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? 'suggestion-item--active'
+                    : 'suggestion-item';
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style,
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
+
+        <Map
+          google={this.props.google}
+          initialCenter={{
+            lat: this.state.mapCenter.lat,
+            lng: this.state.mapCenter.lng
+          }}
+          center={{
+            lat: this.state.mapCenter.lat,
+            lng: this.state.mapCenter.lng
+          }}
+        >
+          <Marker
+            position={{
+              lat: this.state.mapCenter.lat,
+              lng: this.state.mapCenter.lng
+            }} />
+        </Map>
+      </div>
+    )
+  }
 }
 
-const divStyle = {
-  border: '5px solid black',
-  padding: '5px',
-  marginTop: '20px'
-
-};
-
-
-function Map(props) {
-  return (
-    <div>
-    <LoadScript
-      googleMapsApiKey=
-      libraries={["places"]}
-    >
-
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-      >
-      <StandaloneSearchBox
-      style={{zIndex: '5'}}
-      style={divStyle}
-      onPlacesChanged={handlePlacesChanged}
-      >
-      <input type="text" placeholder="Search place here"
-      style={{
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `240px`,
-              height: `32px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-              position: "absolute",
-              left: "50%",
-              marginLeft: "-120px"
-            }}
-      />
-      </StandaloneSearchBox>
-      </GoogleMap>
-    </LoadScript>
-    </div>
-  )
-}
-
-export default Map
+export default GoogleApiWrapper({
+  apiKey: ('')
+})(MapContainer)

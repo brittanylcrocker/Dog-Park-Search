@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import SearchBox from './SearchBox';
-import MapResults from './MapResults';
+import GoogleMap from './Map';
 
 class MainPage extends Component {
   render () {
   return (
     <div>
-      <MapResults />
+      <GoogleMap/>
     </div>
   )}
 }
