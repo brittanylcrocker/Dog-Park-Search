@@ -57,14 +57,14 @@ export class MapContainer extends Component {
 
       let imgUrlString;
       this.state.placesService.textSearch(placesRequest, ((response) => {
-          console.log("response", response[1].photos[0].getUrl())
+          console.log("response", response[2].rating)
         response.map((p) =>{
         if (p.photos) {
-            let imgUrlString = p.photos[0].getUrl()
+          let imgUrlString = p.photos[0].getUrl()
         } else {
           let imgUrlString = ''
         }
-        this.state.markers.push({place_id: p.place_id, name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), rating: p.rating, imgUrl: imgUrlString})}
+        this.state.markers.push({place_id: p.place_id, name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), address: p.formatted_address, rating: p.rating, reviews: p.reviews, imgUrl: imgUrlString})}
         // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
       )
         console.log("markers", this.state.markers)
@@ -84,11 +84,13 @@ export class MapContainer extends Component {
 
 onMouseoverMarker(props, marker, e) {
   $('.park-details').empty()
-  $('.park-details').css({'z-index': '99', 'position': 'absolute'})
-  let parkName = (`<p>${props.name}</p>`)
+  $('.park-details').append('<div id="parkCard"></div>')
+  $('#parkCard').css({'z-index': '99', 'position': 'absolute'})
+  let parkName = (`<p>Name: ${props.name} Address: ${props.address} Rating: ${props.rating}</p>`)
+  $('#parkCard').css({'border': '1px solid black', 'height': '20vh', 'width': '20vh'})
   let parkImage = (`<img href=${props.imgUrl}>`)
-  $('.park-details').append(parkName)
-  $('.park-details').append(parkImage)
+  $('#parkCard').append(parkName)
+  $('#parkCard').append(parkImage)
 }
   render() {
     return (
@@ -149,6 +151,8 @@ onMouseoverMarker(props, marker, e) {
           <Marker
             key={park.place_id}
             name={park.name}
+            rating={park.rating}
+            address={park.address}
             onMouseover={this.onMouseoverMarker}
             position={{
               lat: park.lat,
@@ -171,5 +175,5 @@ onMouseoverMarker(props, marker, e) {
 }
 
 export default GoogleApiWrapper({
-  apiKey: ('')
+  apiKey: (')
 })(MapContainer)
