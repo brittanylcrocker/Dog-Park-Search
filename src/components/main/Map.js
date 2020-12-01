@@ -4,6 +4,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import $ from "jquery";
 
 let parkMapper;
 export class MapContainer extends Component {
@@ -18,6 +19,7 @@ export class MapContainer extends Component {
       selectedPlace: {},
       placesService: {},
       markers: [],
+      parkDetails: [],
 
       mapCenter: {
         lat: 49.2827291,
@@ -25,6 +27,7 @@ export class MapContainer extends Component {
       }
     };
     this.fetchPlaces = this.fetchPlaces.bind(this)
+    this.onMouseoverMarker = this.onMouseoverMarker.bind(this)
   }
 
   handleChange = address => {
@@ -52,11 +55,16 @@ export class MapContainer extends Component {
         query: 'dog park',
       };
 
+      let imgUrlString;
       this.state.placesService.textSearch(placesRequest, ((response) => {
-          // console.log("response", response)
-        response.map((p) =>
-        // console.log(p.geometry.location.lat())
-        this.state.markers.push({name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat()})
+          console.log("response", response[1].photos[0].getUrl())
+        response.map((p) =>{
+        if (p.photos) {
+            let imgUrlString = p.photos[0].getUrl()
+        } else {
+          let imgUrlString = ''
+        }
+        this.state.markers.push({place_id: p.place_id, name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), rating: p.rating, imgUrl: imgUrlString})}
         // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
       )
         console.log("markers", this.state.markers)
@@ -69,12 +77,19 @@ export class MapContainer extends Component {
 
   fetchPlaces(mapProps, map) {
     console.log("fetchPlaces", mapProps)
-  const {google} = mapProps;
-  const service = new google.maps.places.PlacesService(map);
-  this.setState({placesService: service})
+    const {google} = mapProps;
+    const service = new google.maps.places.PlacesService(map);
+    this.setState({placesService: service})
 }
 
-
+onMouseoverMarker(props, marker, e) {
+  $('.park-details').empty()
+  $('.park-details').css({'z-index': '99', 'position': 'absolute'})
+  let parkName = (`<p>${props.name}</p>`)
+  let parkImage = (`<img href=${props.imgUrl}>`)
+  $('.park-details').append(parkName)
+  $('.park-details').append(parkImage)
+}
   render() {
     return (
       <div id='googleMaps'>
@@ -132,7 +147,9 @@ export class MapContainer extends Component {
         >
         {this.state.markers.map((park) =>
           <Marker
-            label={park.name}
+            key={park.place_id}
+            name={park.name}
+            onMouseover={this.onMouseoverMarker}
             position={{
               lat: park.lat,
               lng: park.lng
@@ -145,11 +162,14 @@ export class MapContainer extends Component {
             lng: this.state.mapCenter.lng
           }} />
         </Map>
+        <div className="park-details">
+
+        </div>
       </div>
     )
   }
 }
 
 export default GoogleApiWrapper({
-  apiKey: ()
+  apiKey: ('')
 })(MapContainer)

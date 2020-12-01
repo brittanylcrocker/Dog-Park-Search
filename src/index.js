@@ -6,7 +6,8 @@ import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <App />  
   </React.StrictMode>,
   document.getElementById('root')
 );
