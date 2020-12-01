@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Listing} from 'google-maps-react';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -15,16 +15,28 @@ export class MapContainer extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
+      placesService: {},
 
       mapCenter: {
         lat: 49.2827291,
         lng: -123.1207375
       }
     };
+    this.fetchPlaces = this.fetchPlaces.bind(this)
   }
 
   handleChange = address => {
     this.setState({ address });
+    console.log("handlChange", address)
+    const placesRequest = {
+      type: ['park'],
+      query: 'dog park',
+    };
+
+    this.state.placesService.textSearch(placesRequest, ((response) => {
+      console.log("response", response)
+    }))
+
   };
 
   handleSelect = address => {
@@ -39,6 +51,14 @@ export class MapContainer extends Component {
       })
       .catch(error => console.error('Error', error));
   };
+
+  fetchPlaces(mapProps, map) {
+    console.log("fetchPlaces", mapProps)
+  const {google} = mapProps;
+  const service = new google.maps.places.PlacesService(map);
+  this.setState({placesService: service})
+}
+
 
   render() {
     return (
@@ -92,7 +112,10 @@ export class MapContainer extends Component {
             lat: this.state.mapCenter.lat,
             lng: this.state.mapCenter.lng
           }}
+          onReady={this.fetchPlaces}
+
         >
+
           <Marker
             position={{
               lat: this.state.mapCenter.lat,
