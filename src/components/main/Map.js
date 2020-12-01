@@ -5,8 +5,6 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 
-// display markers by getting longitude and lattitude from geocode byAddress - find way of doing it without mapping because it causes query to go over limit.
-
 let parkMapper;
 export class MapContainer extends Component {
   constructor(props) {
@@ -30,6 +28,7 @@ export class MapContainer extends Component {
   }
 
   handleChange = address => {
+    this.setState({markers: []})
     this.setState({ address });
     console.log("handlChange", address)
 
@@ -54,22 +53,19 @@ export class MapContainer extends Component {
       };
 
       this.state.placesService.textSearch(placesRequest, ((response) => {
-          console.log("response", response)
-          geocodeByAddress(response[1].formatted_address).then(results => getLatLng(results[0]))
-          .then(latLng => {
-            console.log('Success', latLng);
-            this.state.markers.push(latLng)
-          })
-        }))
-      //   response.map((p) =>
-      //   this.state.markers.push({name: p.name, lng: p.geometry.viewport.Sa.i, lat: p.geometry.viewport.Ya.i})
-      //   // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
-      // )
+          // console.log("response", response)
+        response.map((p) =>
+        // console.log(p.geometry.location.lat())
+        this.state.markers.push({name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat()})
+        // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
+      )
         console.log("markers", this.state.markers)
 
-      // }))
+      }))
 
   };
+
+  // this.state.markers.push({name: p.name, lng: p.geometry.location.Scopes[0].a, lat: p.geometry.location.Scopes[0].b})
 
   fetchPlaces(mapProps, map) {
     console.log("fetchPlaces", mapProps)
@@ -155,5 +151,5 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: ('')
+  apiKey: ('AIzaSyB32260FJylhy8uN1UMksr1IrSflp48YTA')
 })(MapContainer)
