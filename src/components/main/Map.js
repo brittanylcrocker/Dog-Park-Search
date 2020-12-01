@@ -5,6 +5,8 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 
+// display markers by getting longitude and lattitude from geocode byAddress - find way of doing it without mapping because it causes query to go over limit.
+
 let parkMapper;
 export class MapContainer extends Component {
   constructor(props) {
@@ -28,27 +30,13 @@ export class MapContainer extends Component {
   }
 
   handleChange = address => {
-    this.setState({markers: []})
     this.setState({ address });
     console.log("handlChange", address)
-    const placesRequest = {
-      type: ['park'],
-      query: 'dog park',
-    };
-
-    this.state.placesService.textSearch(placesRequest, ((response) => {
-        console.log("response", response)
-      response.map((p) =>
-      this.state.markers.push({name: p.name, lng: p.geometry.viewport.Sa.i, lat: p.geometry.viewport.Ya.i})
-      // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
-    )
-      console.log("markers", this.state.markers)
-
-    }))
 
   };
 
   handleSelect = address => {
+    console.log(address)
     this.setState({ address });
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
@@ -59,6 +47,28 @@ export class MapContainer extends Component {
         this.setState({ mapCenter: latLng });
       })
       .catch(error => console.error('Error', error));
+
+      const placesRequest = {
+        type: ['park'],
+        query: 'dog park',
+      };
+
+      this.state.placesService.textSearch(placesRequest, ((response) => {
+          console.log("response", response)
+          geocodeByAddress(response[1].formatted_address).then(results => getLatLng(results[0]))
+          .then(latLng => {
+            console.log('Success', latLng);
+            this.state.markers.push(latLng)
+          })
+        }))
+      //   response.map((p) =>
+      //   this.state.markers.push({name: p.name, lng: p.geometry.viewport.Sa.i, lat: p.geometry.viewport.Ya.i})
+      //   // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
+      // )
+        console.log("markers", this.state.markers)
+
+      // }))
+
   };
 
   fetchPlaces(mapProps, map) {
@@ -126,6 +136,7 @@ export class MapContainer extends Component {
         >
         {this.state.markers.map((park) =>
           <Marker
+            label={park.name}
             position={{
               lat: park.lat,
               lng: park.lng
