@@ -34,7 +34,9 @@ export class MapContainer extends Component {
     };
 
     this.state.placesService.textSearch(placesRequest, ((response) => {
-      console.log("response", response)
+      console.log(response[0].geometry.viewport.Sa.i)
+      console.log(response[0].geometry.viewport.Ya.i)
+
     }))
 
   };
