@@ -5,6 +5,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 
+let parkMapper;
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +17,7 @@ export class MapContainer extends Component {
       activeMarker: {},
       selectedPlace: {},
       placesService: {},
+      markers: [],
 
       mapCenter: {
         lat: 49.2827291,
@@ -26,6 +28,7 @@ export class MapContainer extends Component {
   }
 
   handleChange = address => {
+    this.setState({markers: []})
     this.setState({ address });
     console.log("handlChange", address)
     const placesRequest = {
@@ -34,8 +37,12 @@ export class MapContainer extends Component {
     };
 
     this.state.placesService.textSearch(placesRequest, ((response) => {
-      console.log(response[0].geometry.viewport.Sa.i)
-      console.log(response[0].geometry.viewport.Ya.i)
+        console.log("response", response)
+      response.map((p) =>
+      this.state.markers.push({name: p.name, lng: p.geometry.viewport.Sa.i, lat: p.geometry.viewport.Ya.i})
+      // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
+    )
+      console.log("markers", this.state.markers)
 
     }))
 
@@ -117,12 +124,19 @@ export class MapContainer extends Component {
           onReady={this.fetchPlaces}
 
         >
-
+        {this.state.markers.map((park) =>
           <Marker
             position={{
-              lat: this.state.mapCenter.lat,
-              lng: this.state.mapCenter.lng
+              lat: park.lat,
+              lng: park.lng
             }} />
+
+        )}
+        <Marker
+          position={{
+            lat: this.state.mapCenter.lat,
+            lng: this.state.mapCenter.lng
+          }} />
         </Map>
       </div>
     )
