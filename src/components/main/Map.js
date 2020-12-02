@@ -6,6 +6,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import $ from "jquery";
 
+
 let parkMapper;
 export class MapContainer extends Component {
   constructor(props) {
@@ -175,5 +176,5 @@ onMouseoverMarker(props, marker, e) {
 }
 
 export default GoogleApiWrapper({
-  apiKey: ('')
+  apiKey: process.env.REACT_APP_API_KEY
 })(MapContainer)
