@@ -6,6 +6,17 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import $ from "jquery";
 
+const containerStyle = {
+  position: 'absolute',
+  width: '75%',
+  height: '75%',
+  margin: '0 auto',
+  border: '1px solid blue',
+  'align-items': 'center',
+  'justify-content': 'center',
+  'border': '5px solid green'
+}
+
 
 let parkMapper;
 export class MapContainer extends Component {
@@ -100,7 +111,7 @@ onMouseoverMarker(props, marker, e) {
           value={this.state.address}
           onChange={this.handleChange}
           onSelect={this.handleSelect}
-        >
+          >
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
             <div>
               <input
@@ -132,42 +143,44 @@ onMouseoverMarker(props, marker, e) {
                 })}
               </div>
             </div>
+            )}
+          </PlacesAutocomplete>
+        <div className="row">
+          <Map
+            containerStyle={containerStyle}
+            google={this.props.google}
+            initialCenter={{
+              lat: this.state.mapCenter.lat,
+              lng: this.state.mapCenter.lng
+            }}
+            center={{
+              lat: this.state.mapCenter.lat,
+              lng: this.state.mapCenter.lng
+            }}
+            onReady={this.fetchPlaces}
+
+          >
+          {this.state.markers.map((park) =>
+            <Marker
+              key={park.place_id}
+              name={park.name}
+              rating={park.rating}
+              address={park.address}
+              onMouseover={this.onMouseoverMarker}
+              position={{
+                lat: park.lat,
+                lng: park.lng
+              }} />
+
           )}
-        </PlacesAutocomplete>
-
-        <Map
-          google={this.props.google}
-          initialCenter={{
-            lat: this.state.mapCenter.lat,
-            lng: this.state.mapCenter.lng
-          }}
-          center={{
-            lat: this.state.mapCenter.lat,
-            lng: this.state.mapCenter.lng
-          }}
-          onReady={this.fetchPlaces}
-
-        >
-        {this.state.markers.map((park) =>
           <Marker
-            key={park.place_id}
-            name={park.name}
-            rating={park.rating}
-            address={park.address}
-            onMouseover={this.onMouseoverMarker}
             position={{
-              lat: park.lat,
-              lng: park.lng
+              lat: this.state.mapCenter.lat,
+              lng: this.state.mapCenter.lng
             }} />
-
-        )}
-        <Marker
-          position={{
-            lat: this.state.mapCenter.lat,
-            lng: this.state.mapCenter.lng
-          }} />
-        </Map>
-        <div className="park-details">
+          </Map>
+        </div>
+        <div class="park-details">
 
         </div>
       </div>

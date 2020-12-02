@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-const SERVER_URL = 'http://localhost:5000/api/hello'
-const SERVER_URL_POST = 'http://localhost:5000/api/world'
+const SERVER_URL = 'https://sleepy-temple-85343.herokuapp.com/api/hello'
 
 let urlText = '';
 let locationText = '';
