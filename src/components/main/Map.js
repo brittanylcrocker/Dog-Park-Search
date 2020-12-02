@@ -175,5 +175,5 @@ onMouseoverMarker(props, marker, e) {
 }
 
 export default GoogleApiWrapper({
-  apiKey: (')
+  apiKey: ('')
 })(MapContainer)
