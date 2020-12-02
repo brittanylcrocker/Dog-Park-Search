@@ -22,8 +22,9 @@ class DogsIndex extends Component {
     const fetchDogs = async() => {
         await axios.get(SERVER_URL).then((response) => {
           console.log("FETCH DOGS: ", response.data)
-        this.setState({dogPosts: response.data.posts })
-        console.log(response.data)
+          let data = response.data
+          console.log(data)
+        this.setState({dogPosts: data})
 
       }
       )}
@@ -51,8 +52,7 @@ setUrl(url) {
       <div>
         <h1>A quick not from dogs around the world</h1>
           <DogPostForm onSubmit={this.savePost} onChange={this.setUrl}/>
-
-          <p>{this.state.dogPosts}</p>
+          <PostsDisplay  dogPosts={this.state.dogPosts} />
       </div>
     )
   }
@@ -98,9 +98,16 @@ class DogPostForm extends Component {
   }
 }
 
-const PostDisplay = (props) => {
+const PostsDisplay = (props) => {
   return (
     <div>
+      { console.log(props) }
+      { props.dogPosts.map((p) => (
+        <div>
+        <img src={p.url}/>
+        <p>{p.text}</p>
+        </div>
+      ))}
     </div>
   )
 }
