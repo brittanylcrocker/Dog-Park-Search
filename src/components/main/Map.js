@@ -122,7 +122,7 @@ onMouseoverMarker(props, marker, e) {
   render() {
     return (
       <div className="map-container">
-        <h1 >Find A Dog Park Near You</h1>
+        <h1 className="h1">Find A Dog Park Near You</h1>
           <div >
         <PlacesAutocomplete
           className="inline"
@@ -133,6 +133,7 @@ onMouseoverMarker(props, marker, e) {
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
             <div>
               <input
+                className='sr-only btn-outline-success'
                 {...getInputProps({
                   placeholder: 'Search Places ...',
                   className: 'location-search-input',
@@ -164,9 +165,13 @@ onMouseoverMarker(props, marker, e) {
             )}
 
           </PlacesAutocomplete>
-          <button id="buttonStyle" className="btn btn-outline-success"
+          <div className="ml-3">
+          <div className="d-flex justify-content-center ml-5">
+          <button id="buttonStyle" className="btn btn-outline-success ml-5 m-1"
             onClick={this.updatePreviousZoom}
-            >Unzoom</button>
+            >Zoom Out</button>
+          </div>
+          </div>
           </div>
             <div>
           <Map
