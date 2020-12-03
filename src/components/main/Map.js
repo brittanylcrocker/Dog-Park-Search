@@ -24,22 +24,27 @@ export class MapContainer extends Component {
       placesService: {},
       markers: [],
       parkDetails: [],
-
+      previousZoom: {
+        lat: 49.2827291,
+        lng: -123.1207375
+      },
       mapCenter: {
         lat: 49.2827291,
         lng: -123.1207375
       }
+
     };
     this.fetchPlaces = this.fetchPlaces.bind(this)
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this)
     this.test = this.test.bind(this)
+    this.updatePreviousZoom = this.updatePreviousZoom.bind(this)
+
   }
 
   handleChange = address => {
     this.setState({markers: []})
     this.setState({ address });
     console.log("handlChange", address)
-
   };
 
   handleSelect = address => {
@@ -52,6 +57,7 @@ export class MapContainer extends Component {
 
         // update center state
         this.setState({ mapCenter: latLng });
+        this.setState({previousZoom: latLng})
       })
       .catch(error => console.error('Error', error));
 
@@ -91,6 +97,13 @@ test (props, e) {
   console.log("e", e)
   console.log("map center", props)
   this.setState({mapCenter: {lat: props.position.lat, lng: props.position.lng}})
+  this.setState({zoom: 18})
+}
+
+updatePreviousZoom(e) {
+  console.log(e)
+  this.setState({mapCenter: this.state.previousZoom})
+  this.setState({zoom: 14})
 }
 
 onMouseoverMarker(props, marker, e) {
@@ -189,9 +202,13 @@ onMouseoverMarker(props, marker, e) {
 
           </Map>
         </Container>
+        <button
+          onClick={this.updatePreviousZoom}
+          >Unzoom</button>
         <div class="park-details">
 
         </div>
+
       </div>
     )
   }
