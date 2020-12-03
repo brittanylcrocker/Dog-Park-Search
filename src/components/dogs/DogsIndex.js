@@ -56,8 +56,8 @@ setLocation(location) {
 
   render () {
     return (
-      <div>
-        <h1>A quick not from dogs around the world</h1>
+      <div className="container">
+        <h1 className="m-2 p-2">A quick note from dogs around the world</h1>
           <DogPostForm onSubmit={this.savePost} onChange={this.setUrl} onLocationChange={this.setLocation}/>
           <PostsDisplay  dogPosts={this.state.dogPosts} />
       </div>
@@ -103,10 +103,15 @@ class DogPostForm extends Component {
   render() {
     return(
       <form onSubmit={ this._handleSubmit }>
-        <textarea placeholder="Text" onChange={ this._handleChange } value={ this.state.content }/>
-        <input placeholder="http://" onChange={this._handleUrlChange} value={ this.state.url } />
-        <input placeholder="Baker Park, Coogee, Sydney, AU" onChange={this._handleLocationChange}  value={ this.state.location } />
-        <input type="submit" value="Post" />
+        <div className="container-sm">
+        <div className="form-group container-sm m-2">
+        <label>Enter message here.</label>
+        <textarea className="form-control m-2" placeholder="Text" onChange={ this._handleChange } value={ this.state.content }/>
+        <input className="form-control m-2" placeholder="http://" onChange={this._handleUrlChange} value={ this.state.url } />
+        <input className="form-control m-2" placeholder="Baker Park, Coogee, Sydney, AU" onChange={this._handleLocationChange}  value={ this.state.location } />
+        <input className="btn btn-success m-2" type="submit" value="Post" />
+        </div>
+        </div>
       </form>
     );
   }
@@ -114,17 +119,27 @@ class DogPostForm extends Component {
 
 const PostsDisplay = (props) => {
   return (
-    <div>
+    <div className="container">
+    <div className="container">
+      <div class="row">
       { console.log(props) }
       { props.dogPosts.map((p) => (
-        <div>
-        <img src={p.url}/>
-        <p>{p.text}</p>
-        <p>{p.locationText}</p>
-
+        <div class="col-sm">
+        <div className="card">
+        <img className="thumbnail card-img-top" src={p.url}/>
+        <div className="card-body">
+        <p className="card-text">{p.text}</p>
+        <ul className="list-group list-group-flush">
+        <li className="list-group-item">{p.locationText}</li>
+        </ul>
         </div>
+        </div>
+        </div>
+
       ))}
     </div>
+    </div>
+  </div>
   )
 }
 
