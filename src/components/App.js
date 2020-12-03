@@ -17,10 +17,13 @@ function App(props) {
   return (
     <div className="App">
       <HashRouter>
-        <header id="headerStyle" className="navbar navbar-expand-lg navbar-dark">
-          <Link id="linkStyle" class="btn btn-sm btn-outline-success p-2 m-1" to='/'>Dog Park Search</Link>
-          <Link id="linkStyle" class="btn btn-sm btn-outline-success p-2 m-1 " to='/dogsindex'>Notes From Dogs Around The World</Link>
-        </header>
+        <nav id="headerStyle" className="navbar navbar-expand-lg navbar-dark bg-success">
+          <div className="navbar-nav">
+            <Link id="green" className="navbar-brand">Happy Trails</Link>
+            <Link className="nav-link" to='/'>Dog Park Search</Link>
+            <Link className="nav-link" to='/dogsindex'>Notes From Dogs Around The World</Link>
+          </div>
+        </nav>
         <Route exact path="/dogsindex" component={DogsIndex}></Route>
         <Route exact path="/" component={MapContainer}></Route>
         <Route exact path="/" component={ParkCard}></Route>
