@@ -1,0 +1,7 @@
+.parkCard {
+  visibility: hidden;
+}
+
+.parkCard.show {
+  visibility: visible;
+}

@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core';
 import { Container } from '@material-ui/core';
 import './main.css'
 import mapStyle from './mapStyle'
+import ParkCard from './ParkCard'
 
 let parkMapper;
 export class MapContainer extends Component {
@@ -24,6 +25,11 @@ export class MapContainer extends Component {
       placesService: {},
       markers: [],
       parkDetails: [],
+      name: '',
+      parkAddress: '',
+      rating: '',
+      imgUrl: '',
+
       previousZoom: {
         lat: 49.2827291,
         lng: -123.1207375
@@ -36,7 +42,7 @@ export class MapContainer extends Component {
     };
     this.fetchPlaces = this.fetchPlaces.bind(this)
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this)
-    this.test = this.test.bind(this)
+    this.zoomOnMarker = this.zoomOnMarker.bind(this)
     this.updatePreviousZoom = this.updatePreviousZoom.bind(this)
 
   }
@@ -93,11 +99,13 @@ export class MapContainer extends Component {
     this.setState({placesService: service})
 }
 
-test (props, e) {
+zoomOnMarker (props, e) {
   console.log("e", e)
   console.log("map center", props)
   this.setState({mapCenter: {lat: props.position.lat, lng: props.position.lng}})
   this.setState({zoom: 18})
+  $('.parkCard').addClass('show')
+  this.setState({name: props.name, parkAddress: props.address, rating: props.rating, imgUrl: props.imgUrl})
 }
 
 updatePreviousZoom(e) {
@@ -107,14 +115,18 @@ updatePreviousZoom(e) {
 }
 
 onMouseoverMarker(props, marker, e) {
-  $('.park-details').empty()
-  $('.park-details').append('<div id="parkCard"></div>')
-  $('#parkCard').css({'z-index': '99', 'position': 'absolute'})
-  let parkName = (`<p>Name: ${props.name} Address: ${props.address} Rating: ${props.rating}</p>`)
-  $('#parkCard').css({'border': '1px solid black', 'height': '20vh', 'width': '20vh'})
-  let parkImage = (`<img href=${props.imgUrl}>`)
-  $('#parkCard').append(parkName)
-  $('#parkCard').append(parkImage)
+  // $('.park-details').empty()
+  // $('.park-details').append()
+  // ('<div id="parkCard"></div>')
+  // $('#parkCard').css({'z-index': '99', 'position': 'absolute'})
+  // let parkName = (`<p>Name: ${props.name} Address: ${props.address} Rating: ${props.rating}</p>`)
+  // if (props.rating >= 4.5) {
+  //   let starRating = (`<img src></img>`)
+  // }
+  // $('#parkCard').css({'border': '1px solid black', 'height': '20vh', 'width': '20vh'})
+  // let parkImage = (`<img href=${props.imgUrl}>`)
+  // $('#parkCard').append(parkName)
+  // $('#parkCard').append(parkImage)
 }
   render() {
     return (
@@ -176,7 +188,7 @@ onMouseoverMarker(props, marker, e) {
           >
           {this.state.markers.map((park) =>
             <Marker
-              onClick={this.test}
+              onClick={this.zoomOnMarker}
               key={park.place_id}
               name={park.name}
               rating={park.rating}
@@ -194,7 +206,7 @@ onMouseoverMarker(props, marker, e) {
               lng: this.state.mapCenter.lng
             }} />
 
-          <InfoWindow onClose={this.onInfoWindowClose} onMouseOver={this.test}>
+          <InfoWindow onClose={this.onInfoWindowClose} onMouseOver={this.zoomOnMarker}>
             <div>
               <h2>{this.state.selectedPlace.name}</h2>
             </div>
@@ -206,7 +218,7 @@ onMouseoverMarker(props, marker, e) {
           onClick={this.updatePreviousZoom}
           >Unzoom</button>
         <div class="park-details">
-
+              <ParkCard className="parkCard" name={this.state.name} parkAddress={this.state.parkAddress} rating={this.state.rating} imgUrl={this.state.imgUrl}/>
         </div>
 
       </div>
