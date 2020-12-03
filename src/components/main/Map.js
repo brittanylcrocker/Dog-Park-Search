@@ -5,11 +5,12 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 import $ from "jquery";
-import { Button } from '@material-ui/core';
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import './main.css'
 import mapStyle from './mapStyle'
 import ParkCard from './ParkCard'
+import { Provider } from "./Context"
+import { Button } from 'antd';
 
 let parkMapper;
 export class MapContainer extends Component {
@@ -46,6 +47,7 @@ export class MapContainer extends Component {
     this.updatePreviousZoom = this.updatePreviousZoom.bind(this)
 
   }
+
 
   handleChange = address => {
     this.setState({markers: []})
@@ -84,7 +86,7 @@ export class MapContainer extends Component {
         this.state.markers.push({place_id: p.place_id, name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), address: p.formatted_address, rating: p.rating, reviews: p.reviews, imgUrl: imgUrlString})}
         // console.log("lng", p.geometry.viewport.Sa.i, "lat", p.geometry.viewport.Ya.i)
       )
-        console.log("markers", this.state.markers)
+        console.log("markers", this.state.imgUrl)
 
       }))
 
@@ -104,7 +106,7 @@ zoomOnMarker (props, e) {
   console.log("map center", props)
   this.setState({mapCenter: {lat: props.position.lat, lng: props.position.lng}})
   this.setState({zoom: 18})
-  $('.parkCard').addClass('show')
+  // $('.parkCard').addClass('show')
   this.setState({name: props.name, parkAddress: props.address, rating: props.rating, imgUrl: props.imgUrl})
 }
 
@@ -115,24 +117,15 @@ updatePreviousZoom(e) {
 }
 
 onMouseoverMarker(props, marker, e) {
-  // $('.park-details').empty()
-  // $('.park-details').append()
-  // ('<div id="parkCard"></div>')
-  // $('#parkCard').css({'z-index': '99', 'position': 'absolute'})
-  // let parkName = (`<p>Name: ${props.name} Address: ${props.address} Rating: ${props.rating}</p>`)
-  // if (props.rating >= 4.5) {
-  //   let starRating = (`<img src></img>`)
-  // }
-  // $('#parkCard').css({'border': '1px solid black', 'height': '20vh', 'width': '20vh'})
-  // let parkImage = (`<img href=${props.imgUrl}>`)
-  // $('#parkCard').append(parkName)
-  // $('#parkCard').append(parkImage)
+
 }
   render() {
     return (
-      <div>
-      <Container maxWidth="sm">
+      <div className="map-container">
+        <h1 >Find A Dog Park Near You</h1>
+          <div >
         <PlacesAutocomplete
+          className="inline"
           value={this.state.address}
           onChange={this.handleChange}
           onSelect={this.handleSelect}
@@ -145,7 +138,7 @@ onMouseoverMarker(props, marker, e) {
                   className: 'location-search-input',
                 })}
               />
-              <div className="autocomplete-dropdown-container">
+              <div >
                 {loading && <div>Loading...</div>}
                 {suggestions.map(suggestion => {
                   const className = suggestion.active
@@ -169,7 +162,13 @@ onMouseoverMarker(props, marker, e) {
               </div>
             </div>
             )}
+
           </PlacesAutocomplete>
+          <button id="buttonStyle" className="btn btn-outline-success"
+            onClick={this.updatePreviousZoom}
+            >Unzoom</button>
+          </div>
+            <div>
           <Map
             zoom={this.state.zoom}
             className="map"
@@ -206,25 +205,23 @@ onMouseoverMarker(props, marker, e) {
               lng: this.state.mapCenter.lng
             }} />
 
-          <InfoWindow onClose={this.onInfoWindowClose} onMouseOver={this.zoomOnMarker}>
-            <div>
-              <h2>{this.state.selectedPlace.name}</h2>
-            </div>
-        </InfoWindow>
-
           </Map>
-        </Container>
-        <button
-          onClick={this.updatePreviousZoom}
-          >Unzoom</button>
-        <div class="park-details">
-              <ParkCard className="parkCard" name={this.state.name} parkAddress={this.state.parkAddress} rating={this.state.rating} imgUrl={this.state.imgUrl}/>
+
         </div>
+        <Provider value={this.state}>
+        <ParkCard />
+      </Provider>
+
 
       </div>
     )
   }
 }
+
+
+
+
+
 
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_API_KEY

@@ -6,20 +6,30 @@ import {
   Link
 } from "react-router-dom";
 import Nav from '../components/main/Nav'
-import MainPage from '../components/main/MainPage'
+import MapContainer from '../components/main/Map.js'
+import ParkCard from '../components/main/ParkCard'
+import ParkCard2 from '../components/main/ParkCard2'
 import DogsIndex from '../components/dogs/DogsIndex'
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+function App(props) {
   return (
     <div className="App">
         <HashRouter>
-        <Link to='/home'>Dog Park Search</Link>
-        <Link to='/Dogsindex'>Notes From Dogs Around The World</Link>
-        <Container maxWidth="sm">
-          <Route path="/home"><MainPage /></Route>
-          <Route path="/dogsindex" ><DogsIndex/></Route>
-        </Container>
+        <header className="navbar navbar-expand-lg navbar-dark p-3 ">
+        <Link class="btn btn-sm btn-outline-success p-2 m-1" to='/'>Dog Park Search</Link>
+        <Link class="btn btn-sm btn-outline-success p-2 m-1 " to='/Dogsindex'>Notes From Dogs Around The World</Link>
+        </header>
+        <div>
+              <MapContainer />
+        </div>
+
+        <div className="parkCard">
+              <ParkCard />
+        </div>
+            <Route path="/dogsindex" ><DogsIndex/></Route>
         </HashRouter>
     </div>
   );

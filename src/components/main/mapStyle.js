@@ -1,7 +1,7 @@
-const mapStyle = {
-  position: 'absolute',
-  width: '50%',
-  height: '75%',
-}
+// const mapStyle = {
+//   width: '50%',
+//   height: '75%',
+//   margin: '50px'
+// }
 
-export default mapStyle;
+// export default mapStyle;

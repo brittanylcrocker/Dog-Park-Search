@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css'
 import 'fontsource-roboto';
 
+
 ReactDOM.render(
   <React.StrictMode>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
