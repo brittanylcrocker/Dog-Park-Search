@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Nav from '../components/main/Nav'
+
 import MapContainer from '../components/main/Map.js'
 import ParkCard from '../components/main/ParkCard'
 import DogsIndex from '../components/dogs/DogsIndex'
@@ -17,7 +17,7 @@ function App(props) {
   return (
     <div className="App">
       <HashRouter>
-        <header id="headerStyle" className="navbar navbar-expand-lg navbar-dark p-3 ">
+        <header id="headerStyle" className="navbar navbar-expand-lg navbar-dark">
           <Link id="linkStyle" class="btn btn-sm btn-outline-success p-2 m-1" to='/'>Dog Park Search</Link>
           <Link id="linkStyle" class="btn btn-sm btn-outline-success p-2 m-1 " to='/dogsindex'>Notes From Dogs Around The World</Link>
         </header>

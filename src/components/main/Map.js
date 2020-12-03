@@ -43,7 +43,6 @@ export class MapContainer extends Component {
 
     };
     this.fetchPlaces = this.fetchPlaces.bind(this)
-    this.onMouseoverMarker = this.onMouseoverMarker.bind(this)
     this.zoomOnMarker = this.zoomOnMarker.bind(this)
     this.updatePreviousZoom = this.updatePreviousZoom.bind(this)
 
@@ -80,7 +79,7 @@ export class MapContainer extends Component {
         } else {
           let imgUrlString = ''
         }
-        this.state.markers.push({place_id: p.place_id, name: p.name, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), address: p.formatted_address, rating: p.rating, reviews: p.reviews, imgUrl: imgUrlString})}
+        this.state.markers.push({place_id: p.place_id, name: `Location: ${p.name}`, lng: p.geometry.location.lng(), lat: p.geometry.location.lat(), parkAddress: `Address: ${p.formatted_address}`, rating: `Rating: ${p.rating}/5`, reviews: p.reviews, imgUrl: imgUrlString})}
       )
 
       }))
@@ -109,7 +108,7 @@ updatePreviousZoom(e) {
   render() {
     return (
       <div className="map-container">
-        <h1 className="h1">Find A Dog Park Near You</h1>
+        <h1 className="h1 mt-3">Find A Dog Park Near You</h1>
         <div>
             <PlacesAutocomplete
               className="inline"
@@ -183,7 +182,7 @@ updatePreviousZoom(e) {
                 key={park.place_id}
                 name={park.name}
                 rating={park.rating}
-                address={park.address}
+                address={park.parkAddress}
                 onMouseover={this.onMouseoverMarker}
                 position={{
                   lat: park.lat,
