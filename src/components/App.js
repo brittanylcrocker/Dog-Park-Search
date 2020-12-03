@@ -12,7 +12,7 @@ import ParkCard2 from '../components/main/ParkCard2'
 import DogsIndex from '../components/dogs/DogsIndex'
 import { Container, Grid } from '@material-ui/core';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App(props) {
   return (
@@ -20,17 +20,15 @@ function App(props) {
         <HashRouter>
         <header className="navbar navbar-expand-lg navbar-dark p-3 ">
         <Link class="btn btn-sm btn-outline-success p-2 m-1" to='/'>Dog Park Search</Link>
-        <Link class="btn btn-sm btn-outline-success p-2 m-1 " to='/Dogsindex'>Notes From Dogs Around The World</Link>
+        <Link class="btn btn-sm btn-outline-success p-2 m-1 " to='/dogsindex'>Notes From Dogs Around The World</Link>
         </header>
-        <div>
-              <MapContainer />
-        </div>
+        <Route exact path="/dogsindex" component={DogsIndex}></Route>
+        <Route exact path="/" component={MapContainer}></Route>
+        <Route exact path="/" component={ParkCard}></Route>
 
-        <div className="parkCard">
-              <ParkCard />
-        </div>
-            <Route path="/dogsindex" ><DogsIndex/></Route>
-        </HashRouter>
+    </HashRouter>
+
+        
     </div>
   );
 }
