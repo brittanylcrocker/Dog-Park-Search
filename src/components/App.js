@@ -19,7 +19,7 @@ function App(props) {
       <HashRouter>
         <nav id="headerStyle" className="navbar navbar-expand-lg navbar-dark bg-success">
           <div className="navbar-nav">
-            <Link id="green" className="navbar-brand">Happy Trails</Link>
+            <Link id="green" className="navbar-brand">Happy Tails</Link>
             <Link className="nav-link" to='/'>Dog Park Search</Link>
             <Link className="nav-link" to='/dogsindex'>Notes From Dogs Around The World</Link>
           </div>
