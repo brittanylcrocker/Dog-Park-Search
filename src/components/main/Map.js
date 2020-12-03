@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
-import {Map, Marker, GoogleApiWrapper, Listing} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper, Listing, InfoWindow,} from 'google-maps-react';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 import $ from "jquery";
-
-const containerStyle = {
-  position: 'absolute',
-  width: '75%',
-  height: '75%',
-  margin: '0 auto',
-  border: '1px solid blue',
-  'align-items': 'center',
-  'justify-content': 'center',
-  'border': '5px solid green'
-}
-
+import { Button } from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import './main.css'
+import mapStyle from './mapStyle'
 
 let parkMapper;
 export class MapContainer extends Component {
@@ -25,7 +17,7 @@ export class MapContainer extends Component {
     this.state = {
       // for google map places autocomplete
       address: '',
-
+      zoom: 14,
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
@@ -40,6 +32,7 @@ export class MapContainer extends Component {
     };
     this.fetchPlaces = this.fetchPlaces.bind(this)
     this.onMouseoverMarker = this.onMouseoverMarker.bind(this)
+    this.test = this.test.bind(this)
   }
 
   handleChange = address => {
@@ -94,6 +87,12 @@ export class MapContainer extends Component {
     this.setState({placesService: service})
 }
 
+test (props, e) {
+  console.log("e", e)
+  console.log("map center", props)
+  this.setState({mapCenter: {lat: props.position.lat, lng: props.position.lng}})
+}
+
 onMouseoverMarker(props, marker, e) {
   $('.park-details').empty()
   $('.park-details').append('<div id="parkCard"></div>')
@@ -106,7 +105,8 @@ onMouseoverMarker(props, marker, e) {
 }
   render() {
     return (
-      <div id='googleMaps'>
+      <div>
+      <Container maxWidth="sm">
         <PlacesAutocomplete
           value={this.state.address}
           onChange={this.handleChange}
@@ -136,7 +136,7 @@ onMouseoverMarker(props, marker, e) {
                         className,
                         style,
                       })}
-                    >
+                      >
                       <span>{suggestion.description}</span>
                     </div>
                   );
@@ -145,9 +145,10 @@ onMouseoverMarker(props, marker, e) {
             </div>
             )}
           </PlacesAutocomplete>
-        <div className="row">
           <Map
-            containerStyle={containerStyle}
+            zoom={this.state.zoom}
+            className="map"
+            style={mapStyle}
             google={this.props.google}
             initialCenter={{
               lat: this.state.mapCenter.lat,
@@ -162,6 +163,7 @@ onMouseoverMarker(props, marker, e) {
           >
           {this.state.markers.map((park) =>
             <Marker
+              onClick={this.test}
               key={park.place_id}
               name={park.name}
               rating={park.rating}
@@ -178,8 +180,15 @@ onMouseoverMarker(props, marker, e) {
               lat: this.state.mapCenter.lat,
               lng: this.state.mapCenter.lng
             }} />
+
+          <InfoWindow onClose={this.onInfoWindowClose} onMouseOver={this.test}>
+            <div>
+              <h2>{this.state.selectedPlace.name}</h2>
+            </div>
+        </InfoWindow>
+
           </Map>
-        </div>
+        </Container>
         <div class="park-details">
 
         </div>

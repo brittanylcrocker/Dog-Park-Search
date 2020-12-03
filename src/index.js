@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import './index.css'
+import 'fontsource-roboto';
 
 ReactDOM.render(
   <React.StrictMode>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <App />  
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
