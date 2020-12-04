@@ -1,7 +1,8 @@
 # Happy Tails
 
 Find dog parks near you by entering a location into the provided auto complete search bar to filter a list of 20 dog-friendly parks near the entered location. Locations appear as clickable markers on the map. Click on the markers to display details about the park, park name, address and rating. Click Zoom out to reset zoom to your original search results.
-Secondary feature: Notes from dogs around the world, users from around the world can share a photo, text
+
+Secondary feature: Notes from dogs around the world, users from around the world can post a photo, text and location to the page and view posts shared by others.
 
 ## Technologies used
 
@@ -27,4 +28,4 @@ For the search feature I used the Google Maps Api, in conjunction with the [goog
 ### Next Steps:
 
 Current location feature, so the area is set to a users current location.
-Accessibility, improving the LightHouse Score which is currently 86 to 95+. 
+Accessibility, improving the LightHouse Score which is currently 86 to 95+.
