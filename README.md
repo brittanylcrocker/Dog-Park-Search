@@ -5,13 +5,14 @@ Secondary feature: Notes from dogs around the world, users from around the world
 
 ## Technologies used
 
-Client:
+##### Client:
 React
 Jquery
 Javascript
 Bootstrap
 
-Server:
+##### Server:
+[Git Hub Repo](https://github.com/brittanylcrocker/Dog-Park-Server)
 Node
 Express
 Axios
@@ -21,10 +22,9 @@ Deployed using Surge and Heroku.
 
 ### Google Maps Api
 
-For the search feature I used the Google Maps Api/
-
+For the search feature I used the Google Maps Api, in conjunction with the [google-maps-react](https://www.npmjs.com/package/google-maps-react) npm package. The Google Maps API directly manipulates the DOM however, as React uses a virtual DOM, the use of a package is recommended. The most challenging part of working with this api and my project as a whole was stylising the map, as it is a feature from the api, it doesn't behave like a normal React component. Due to this, in the future, working with the Google Maps API I would favour using another framework or vanilla Javascript
 
 ### Next Steps:
 
 Current location feature, so the area is set to a users current location.
-Accessibility
+Accessibility, improving the LightHouse Score which is currently 86 to 95 +/
